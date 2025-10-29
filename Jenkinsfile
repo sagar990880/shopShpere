@@ -17,25 +17,30 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build Microservices') {
             steps {
                 echo "🔹 Building all microservices..."
-                sh 'mvn -v'   // ✅ check Maven available
-                sh 'mvn clean package -DskipTests'
+                sh '''
+                    cd discovery-server && mvn clean package -DskipTests
+                    cd ../apigateway && mvn clean package -DskipTests
+                    cd ../product-service && mvn clean package -DskipTests
+                    cd ../order_service && mvn clean package -DskipTests
+                    cd ../payment_service && mvn clean package -DskipTests
+                '''
             }
         }
 
         stage('Docker Build') {
             steps {
                 echo "🔹 Building Docker images..."
-                // docker build commands here
+                // docker build commands yahan likh (har service ke liye)
             }
         }
 
         stage('Deploy') {
             steps {
                 echo "🚀 Deploying services..."
-                // deployment steps
+                // docker-compose up -d etc.
             }
         }
     }
